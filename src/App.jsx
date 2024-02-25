@@ -253,7 +253,7 @@ export default function App() {
           </div>
         </div>
         {/*side panel*/}
-        <div className="absolute z-10 left-0 ml-2 top-1/4 bg-white border rounded-lg shadow-lg p-2">
+        <div className="absolute z-10 left-0 ml-2 top-1/4 bg-white border rounded-lg shadow-lg p-4">
               <div className="mb-2">
                 <p className="text-xs text-slate-500 mb-1">Stroke</p>
                 <div className="flex gap-1">
@@ -289,7 +289,7 @@ export default function App() {
               <div className="mb-2">
                 <p className="text-xs text-slate-500 mb-1">Edge</p>
                 <div className="flex gap-1">
-                  <button onClick={ () => setEdge(0)} className ="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                  <button onClick={ () => setEdge(0)} className ={`w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700 ${edge === 0 && "bg-purple-100"}`}>
                     <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" className="w-5 h-5">
                       <path d="M3.33334 9.99998V6.66665C3.33334 6.04326 3.33403 4.9332 3.33539 3.33646C4.95233 3.33436 6.06276 3.33331 6.66668 3.33331H10"></path>
                       <path d="M13.3333 3.33331V3.34331"></path>
@@ -305,7 +305,7 @@ export default function App() {
                       <path d="M16.6667 16.6667V16.6767"></path>
                     </svg>
                   </button>
-                  <button onClick={ () => setEdge(10)} className ="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                  <button onClick={ () => setEdge(10)} className ={`w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700 ${edge === 10 && "bg-purple-100"}`}>
                     <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                       <g strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M4 12v-4a4 4 0 0 1 4 -4h4"></path>
@@ -328,17 +328,17 @@ export default function App() {
               <div className="">
                 <p className="text-xs text-slate-500 mb-1">Stroke Width</p>
                 <div className="flex gap-1">
-                  <button onClick={ () => setStrokeWidth(1)} className ="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                  <button onClick={ () => setStrokeWidth(1)} className ={`w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700 ${strokeWidth === 1 && "bg-purple-100"}`}>
                   <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4.167 10h11.666" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path>
                   </svg>
                   </button>
-                  <button onClick={ () => setStrokeWidth(3)} className="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                  <button onClick={ () => setStrokeWidth(3)} className={`w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700 ${strokeWidth === 3 && "bg-purple-100"}`}>
                   <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 10h10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"></path>
                   </svg>
                   </button>
-                  <button onClick={ () => setStrokeWidth(5)} className="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                  <button onClick={ () => setStrokeWidth(5)} className={`w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700 ${strokeWidth === 5 && "bg-purple-100"}`}>
                   <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 10h10" stroke="currentColor" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round"></path>
                   </svg>
