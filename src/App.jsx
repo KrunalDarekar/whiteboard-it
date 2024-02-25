@@ -20,12 +20,13 @@ import { ACTIONS } from "./constants";
 export default function App() {
   const stageRef = useRef();
   const [action, setAction] = useState(ACTIONS.SELECT);
-  const [fillColor, setFillColor] = useState("#ff0000");
+  const [fillColor, setFillColor] = useState("#ffc9c9");
   const [rectangles, setRectangles] = useState([]);
   const [circles, setCircles] = useState([]);
   const [arrows, setArrows] = useState([]);
   const [scribbles, setScribbles] = useState([]);
-  const [strokeColor, setStrokeColor] = useState("#000000")
+  const [strokeColor, setStrokeColor] = useState("#000000");
+  const [edge, setEdge] = useState(10)
 
   const isPainting = useRef();
   const currentShapeId = useRef();
@@ -51,10 +52,11 @@ export default function App() {
             id,
             x,
             y,
-            height: 20,
-            width: 20,
+            height: 1,
+            width: 1,
             fillColor,
             strokeColor,
+            edge
           },
         ]);
         break;
@@ -109,8 +111,11 @@ export default function App() {
             if (rectangle.id === currentShapeId.current) {
               return {
                 ...rectangle,
-                width: x - rectangle.x,
-                height: y - rectangle.y,
+                x: Math.min(rectangle.x, x),
+                y: Math.min(rectangle.y, y),
+                width: Math.abs(x - rectangle.x),
+                height: Math.abs(y - rectangle.y),
+                edge
               };
             }
             return rectangle;
@@ -193,7 +198,7 @@ export default function App() {
               }
               onClick={() => setAction(ACTIONS.SELECT)}
             >
-              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 22 22" className="w-5 h-5" fill="none" stroke-width="1.25"><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 6l4.153 11.793a0.365 .365 0 0 0 .331 .207a0.366 .366 0 0 0 .332 -.207l2.184 -4.793l4.787 -1.994a0.355 .355 0 0 0 .213 -.323a0.355 .355 0 0 0 -.213 -.323l-11.787 -4.36z"></path><path d="M13.5 13.5l4.5 4.5"></path></g></svg>
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 22 22" className="w-5 h-5" fill="none" strokeWidth="1.25"><g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 6l4.153 11.793a0.365 .365 0 0 0 .331 .207a0.366 .366 0 0 0 .332 -.207l2.184 -4.793l4.787 -1.994a0.355 .355 0 0 0 .213 -.323a0.355 .355 0 0 0 -.213 -.323l-11.787 -4.36z"></path><path d="M13.5 13.5l4.5 4.5"></path></g></svg>
             </button>
             <button
               className={
@@ -203,7 +208,7 @@ export default function App() {
               }
               onClick={() => setAction(ACTIONS.RECTANGLE)}
             >
-              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></g></svg>
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></g></svg>
             </button>
             <button
               className={
@@ -213,7 +218,7 @@ export default function App() {
               }
               onClick={() => setAction(ACTIONS.CIRCLE)}
             >
-              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle></g></svg>
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle></g></svg>
             </button>
             <button
               className={
@@ -223,7 +228,7 @@ export default function App() {
               }
               onClick={() => setAction(ACTIONS.ARROW)}
             >
-              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" className="w-5 h-5"><g stroke-width="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="15" y1="16" x2="19" y2="12"></line><line x1="15" y1="8" x2="19" y2="12"></line></g></svg>
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="15" y1="16" x2="19" y2="12"></line><line x1="15" y1="8" x2="19" y2="12"></line></g></svg>
             </button>
             <button
               className={
@@ -233,37 +238,89 @@ export default function App() {
               }
               onClick={() => setAction(ACTIONS.SCRIBBLE)}
             >
-              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" className="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.25"><path clip-rule="evenodd" d="m7.643 15.69 7.774-7.773a2.357 2.357 0 1 0-3.334-3.334L4.31 12.357a3.333 3.333 0 0 0-.977 2.357v1.953h1.953c.884 0 1.732-.352 2.357-.977Z"></path><path d="m11.25 5.417 3.333 3.333"></path></g></svg>
-            </button>
-
-            <button>
-              <input
-                className="w-6 h-6"
-                type="color"
-                value={fillColor}
-                onChange={(e) => setFillColor(e.target.value)}
-              />
-            </button>
-
-            <button>
-              <input
-                className="w-6 h-6"
-                type="color"
-                value={strokeColor}
-                onChange={(e) => setStrokeColor(e.target.value)}
-              />
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.25"><path clipRule="evenodd" d="m7.643 15.69 7.774-7.773a2.357 2.357 0 1 0-3.334-3.334L4.31 12.357a3.333 3.333 0 0 0-.977 2.357v1.953h1.953c.884 0 1.732-.352 2.357-.977Z"></path><path d="m11.25 5.417 3.333 3.333"></path></g></svg>
             </button>
 
             <button onClick={handleExport} className="hover:bg-violet-100 rounded-lg p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
             </button>
           </div>
         </div>
         {/*side panel*/}
-        <div className="">
-              
+        <div className="absolute z-10 left-0 ml-2 top-1/4 bg-white border rounded-lg shodow-lg p-2">
+              <div className="mb-2">
+                <p className="text-xs text-slate-500 mb-1">Stroke</p>
+                <div className="flex gap-1">
+                  <button onClick={ () => setStrokeColor("#1E1E1E")} className ="w-5 h-5 bg-black border border-slate-300 rounded"></button>
+                  <button onClick={ () => setStrokeColor("#B92929")} className="w-5 h-5 bg-stroke-red border border-slate-300 rounded"></button>
+                  <button onClick={ () => setStrokeColor("#278338")} className="w-5 h-5 bg-stroke-green border border-slate-300 rounded"></button>
+                  <button onClick={ () => setStrokeColor("#155ea1")} className="w-5 h-5 bg-stroke-blue border border-slate-300 rounded"></button>
+                  <button onClick={ () => setStrokeColor("#c77400")} className="w-5 h-5 bg-stroke-orange border border-slate-300 rounded"></button>
+                  <input
+                    className="w-5 h-5 rounded border-none ml-2"
+                    type="color"
+                    value={strokeColor}
+                    onChange={(e) => setStrokeColor(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mb-2">
+                <p className="text-xs text-slate-500 mb-1">Background</p>
+                <div className="flex gap-1">
+                  <button onClick={ () => setFillColor("#00000000")} className ="w-5 h-5 bg-fill-transparent border border-slate-300 rounded"></button>
+                  <button onClick={ () => setFillColor("#ffc9c9")} className="w-5 h-5 bg-fill-red border border-slate-300 rounded"></button>
+                  <button onClick={ () => setFillColor("#b2f2bb")} className="w-5 h-5 bg-fill-green border border-slate-300 rounded"></button>
+                  <button onClick={ () => setFillColor("#a5d8ff")} className="w-5 h-5 bg-fill-blue border border-slate-300 rounded"></button>
+                  <button onClick={ () => setFillColor("#ffec99")} className="w-5 h-5 bg-fill-orange border border-slate-300 rounded"></button>
+                  <input
+                    className="w-5 h-5 rounded border-none ml-2"
+                    type="color"
+                    value={fillColor}
+                    onChange={(e) => setFillColor(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 mb-1">Edge</p>
+                <div className="flex gap-1">
+                  <button onClick={ () => setEdge(0)} className ="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                    <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" className="w-5 h-5">
+                      <path d="M3.33334 9.99998V6.66665C3.33334 6.04326 3.33403 4.9332 3.33539 3.33646C4.95233 3.33436 6.06276 3.33331 6.66668 3.33331H10"></path>
+                      <path d="M13.3333 3.33331V3.34331"></path>
+                      <path d="M16.6667 3.33331V3.34331"></path>
+                      <path d="M16.6667 6.66669V6.67669"></path>
+                      <path d="M16.6667 10V10.01"></path>
+                      <path d="M3.33334 13.3333V13.3433"></path>
+                      <path d="M16.6667 13.3333V13.3433"></path>
+                      <path d="M3.33334 16.6667V16.6767"></path>
+                      <path d="M6.66666 16.6667V16.6767"></path>
+                      <path d="M10 16.6667V16.6767"></path>
+                      <path d="M13.3333 16.6667V16.6767"></path>
+                      <path d="M16.6667 16.6667V16.6767"></path>
+                    </svg>
+                  </button>
+                  <button onClick={ () => setEdge(10)} className ="w-8 h-8 border border-slate-300 rounded flex justify-center items-center text-purple-700">
+                    <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                      <g stroke-width="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 12v-4a4 4 0 0 1 4 -4h4"></path>
+                        <line x1="16" y1="4" x2="16" y2="4.01"></line>
+                        <line x1="20" y1="4" x2="20" y2="4.01"></line>
+                        <line x1="20" y1="8" x2="20" y2="8.01"></line>
+                        <line x1="20" y1="12" x2="20" y2="12.01"></line>
+                        <line x1="4" y1="16" x2="4" y2="16.01"></line>
+                        <line x1="20" y1="16" x2="20" y2="16.01"></line>
+                        <line x1="4" y1="20" x2="4" y2="20.01"></line>
+                        <line x1="8" y1="20" x2="8" y2="20.01"></line>
+                        <line x1="12" y1="20" x2="12" y2="20.01"></line>
+                        <line x1="16" y1="20" x2="16" y2="20.01"></line>
+                        <line x1="20" y1="20" x2="20" y2="20.01"></line>
+                      </g>
+                    </svg>
+                  </button>
+                </div>
+              </div>
         </div>
 
         {/* Canvas */}
@@ -289,6 +346,7 @@ export default function App() {
             />
 
             {rectangles.map((rectangle) => (
+              isPainting && rectangle.width > 0 && rectangle.height > 0 &&
               <Rect
                 key={rectangle.id}
                 x={rectangle.x}
@@ -300,6 +358,8 @@ export default function App() {
                 width={rectangle.width}
                 draggable={isDraggable}
                 onClick={onClick}
+                // cornerRadius={Math.max(0, Math.min(rectangle.width, rectangle.height) / rectangle.edge)}
+                cornerRadius={rectangle.edge}
               />
             ))}
 
