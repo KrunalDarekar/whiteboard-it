@@ -1,9 +1,3 @@
-import { TbRectangle } from "react-icons/tb";
-import { IoMdDownload } from "react-icons/io";
-import { FaLongArrowAltRight } from "react-icons/fa";
-import { LuPencil } from "react-icons/lu";
-import { GiArrowCursor } from "react-icons/gi";
-import { FaRegCircle } from "react-icons/fa6";
 import {
   Arrow,
   Circle,
@@ -11,6 +5,7 @@ import {
   Line,
   Rect,
   Stage,
+  Text,
   Transformer,
 } from "react-konva";
 import { useRef, useState } from "react";
@@ -33,7 +28,7 @@ export default function App() {
   const currentShapeId = useRef();
   const transformerRef = useRef();
 
-  const isDraggable = action === ACTIONS.SELECT;
+  let isDraggable = action === ACTIONS.SELECT;
 
   function onPointerDown() {
     if (action === ACTIONS.SELECT) return;
@@ -69,7 +64,7 @@ export default function App() {
             id,
             x,
             y,
-            radius: 20,
+            radius: 1,
             fillColor,
             strokeColor,
             strokeWidth,
@@ -82,7 +77,7 @@ export default function App() {
           ...arrows,
           {
             id,
-            points: [x, y, x + 20, y + 20],
+            points: [x, y, x + 1, y + 1],
             fillColor,
             strokeColor,
             strokeWidth,
@@ -94,7 +89,7 @@ export default function App() {
           ...scribbles,
           {
             id,
-            points: [x, y],
+            points: [x, y, x + 1, y + 1],
             fillColor,
             strokeColor,
             strokeWidth,
@@ -183,9 +178,13 @@ export default function App() {
   }
 
   function onClick(e) {
-    if (action !== ACTIONS.SELECT) return;
-    const target = e.currentTarget;
-    transformerRef.current.nodes([target]);
+    if(action === ACTIONS.SELECT) {
+      const target = e.currentTarget;
+      console.log(target)
+      transformerRef.current.nodes([target]);
+    } else {
+      return
+    }
   }
 
   return (
@@ -210,7 +209,10 @@ export default function App() {
                   ? "bg-violet-200 p-2 rounded-lg"
                   : "p-2 hover:bg-violet-100 rounded-lg"
               }
-              onClick={() => setAction(ACTIONS.RECTANGLE)}
+              onClick={() => {
+                transformerRef.current.nodes([])
+                setAction(ACTIONS.RECTANGLE)
+              }}
             >
               <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect></g></svg>
             </button>
@@ -220,7 +222,10 @@ export default function App() {
                   ? "bg-violet-200 p-2 rounded-lg"
                   : "p-2 hover:bg-violet-100 rounded-lg"
               }
-              onClick={() => setAction(ACTIONS.CIRCLE)}
+              onClick={() => {
+                transformerRef.current.nodes([])
+                setAction(ACTIONS.CIRCLE)
+              }}
             >
               <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" className="w-5 h-5" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle></g></svg>
             </button>
@@ -230,7 +235,10 @@ export default function App() {
                   ? "bg-violet-200 p-2 rounded-lg text-black"
                   : "p-2 hover:bg-violet-100 rounded-lg text-black"
               }
-              onClick={() => setAction(ACTIONS.ARROW)}
+              onClick={() => {
+                transformerRef.current.nodes([])
+                setAction(ACTIONS.ARROW)
+              }}
             >
               <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="15" y1="16" x2="19" y2="12"></line><line x1="15" y1="8" x2="19" y2="12"></line></g></svg>
             </button>
@@ -240,12 +248,18 @@ export default function App() {
                   ? "bg-violet-200 p-2 rounded-lg"
                   : "p-2 hover:bg-violet-100 rounded-lg"
               }
-              onClick={() => setAction(ACTIONS.SCRIBBLE)}
+              onClick={() => {
+                transformerRef.current.nodes([])
+                setAction(ACTIONS.SCRIBBLE)
+              }}
             >
               <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><g strokeWidth="1.25"><path clipRule="evenodd" d="m7.643 15.69 7.774-7.773a2.357 2.357 0 1 0-3.334-3.334L4.31 12.357a3.333 3.333 0 0 0-.977 2.357v1.953h1.953c.884 0 1.732-.352 2.357-.977Z"></path><path d="m11.25 5.417 3.333 3.333"></path></g></svg>
             </button>
 
-            <button onClick={handleExport} className="hover:bg-violet-100 rounded-lg p-2">
+            <button onClick={ () => {
+                transformerRef.current.nodes([])
+                handleExport()
+              }} className="hover:bg-violet-100 rounded-lg p-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
@@ -355,6 +369,7 @@ export default function App() {
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          className="cursor-crosshair"
         >
           <Layer>
             <Rect
