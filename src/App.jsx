@@ -20,6 +20,7 @@ export default function App() {
   const [circles, setCircles] = useState([]);
   const [arrows, setArrows] = useState([]);
   const [scribbles, setScribbles] = useState([]);
+  const [lines, setLines] = useState([])
   const [strokeColor, setStrokeColor] = useState("#B92929");
   const [edge, setEdge] = useState(10)
   const [strokeWidth, setStrokeWidth] = useState(3)
@@ -96,6 +97,18 @@ export default function App() {
           },
         ]);
         break;
+      case ACTIONS.LINE:
+        setLines((lines) => [
+          ...lines,
+          {
+            id,
+            points: [x, y],
+            fillColor,
+            strokeColor,
+            strokeWidth,
+          },
+        ]);
+        break;
     }
   }
   function onPointerMove() {
@@ -157,6 +170,19 @@ export default function App() {
               };
             }
             return scribble;
+          })
+        );
+        break;
+      case ACTIONS.LINE:
+        setLines((lines) =>
+          lines.map((line) => {
+            if (line.id === currentShapeId.current) {
+              return {
+                ...line,
+                points: [line.points[0],line.points[1], x , y],
+              };
+            }
+            return line;
           })
         );
         break;
@@ -241,6 +267,21 @@ export default function App() {
               }}
             >
               <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><g strokeWidth="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="15" y1="16" x2="19" y2="12"></line><line x1="15" y1="8" x2="19" y2="12"></line></g></svg>
+            </button>
+            <button
+              className={
+                action === ACTIONS.LINE
+                  ? "bg-violet-200 p-2 rounded-lg text-black"
+                  : "p-2 hover:bg-violet-100 rounded-lg text-black"
+              }
+              onClick={() => {
+                transformerRef.current.nodes([])
+                setAction(ACTIONS.LINE)
+              }}
+            >
+              <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                <path d="M4.167 10h11.666" strokeWidth="1.5"></path>
+              </svg>
             </button>
             <button
               className={
@@ -436,6 +477,20 @@ export default function App() {
                 stroke={scribble.strokeColor}
                 strokeWidth={scribble.strokeWidth}
                 fill={scribble.fillColor}
+                draggable={isDraggable}
+                onClick={onClick}
+              />
+            ))}
+
+            {lines.map((line) => (
+              <Line
+                key={line.id}
+                lineCap="round"
+                lineJoin="round"
+                points={line.points}
+                stroke={line.strokeColor}
+                strokeWidth={line.strokeWidth}
+                fill={line.fillColor}
                 draggable={isDraggable}
                 onClick={onClick}
               />
